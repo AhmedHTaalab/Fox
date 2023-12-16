@@ -1,0 +1,42 @@
+[
+  {
+    "firstName": "Sam" ,
+    "lastName": "Jackson" ,
+    "EmployeeID": 1000 ,
+    "Designation": "Manager",
+    "KnownLanguages": [
+      {
+        "LanguageName": "Java",
+        "ScoreOutof100": 90
+      },
+      {
+        "LanguageName": "C#",
+        "ScoreOutof100": 50
+      },
+      {
+        "LanguageName": "C++",
+        "ScoreOutof100": 80
+      }
+    ]
+  },
+  {
+    "FirstName": "John" ,
+    "LastName": "Adamo" ,
+    "EmployeeID": 2000 ,
+    "Designation": "Developer",
+    "KnownLanguages": [
+      {
+        "LanguageName": "Perl",
+        "ScoreOutof100": 30
+      },
+      {
+        "LanguageName": "Java",
+        "ScoreOutof100": 65
+      },
+      {
+        "LanguageName": "C++",
+        "ScoreOutof100": 70
+      }
+    ]
+  }
+]
