@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
     @JsonProperty("FirstName")
@@ -41,7 +42,7 @@ public class Employee {
 
     // Getters and setters for EmployeeID
     public int getEmployeeID() {
-        return  employeeID;
+        return employeeID;
     }
 
     public void setEmployeeID(int employeeID) {

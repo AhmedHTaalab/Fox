@@ -19,24 +19,23 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-
     @GetMapping("Test")
     public String Test() {
         return "I LOVE YOU";
     }
 
     @GetMapping("/")
-    public List<Employee> getAllStudents() {
+    public List<Employee> getAllemployees() {
 
         List<Employee> Employee = new ArrayList<>();
         Employee = employeeService.readEmployeesFromJsonFile();
         return Employee;
     }
 
-
     @GetMapping("/ByID/{targetID}")
     public ResponseEntity<Map<String, Object>> getEmployeeByID(@PathVariable int targetID) {
-        List<Employee> Employees = employeeService.readEmployeesFromJsonFile(); // Assuming XMLRead returns a list of all students
+        List<Employee> Employees = employeeService.readEmployeesFromJsonFile(); // Assuming XMLRead returns a list of
+                                                                                // all employees
 
         List<Employee> EmployeeWithTargetID = new ArrayList<>();
 
@@ -57,39 +56,26 @@ public class EmployeeController {
 
     @GetMapping("/ByDesignation/{targetDesignation}")
     public ResponseEntity<Map<String, Object>> getEmployeeByDesignation(@PathVariable String targetDesignation) {
-        List<Employee> Employees = employeeService.readEmployeesFromJsonFile();// Assuming XMLRead returns a list of all students
-
-        List<Employee> studentsWithTargetName = new ArrayList<>();
-
-        for (Employee empl : Employees) {
-            if (empl.getDesignation() == targetDesignation) {
-                studentsWithTargetName.add(empl);
-            }
-        }
-
-        int count = studentsWithTargetName.size();
+        List<Employee> employees = employeeService.getEmployeesByDesignation(targetDesignation);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("count", count);
-        response.put("Employees", studentsWithTargetName);
+        response.put("count", employees.size());
+        response.put("Employees", employees);
 
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping("/")
+    public String addEmployee(@RequestBody Employee employee) {
+        employeeService.addEmployee(employee);
+        return String.format("Employee with ID %s added successfully", employee.getEmployeeID());
+    }
 
-//    @PostMapping("/")
-//    public String addStudent(@RequestBody Employee student) {
-//        employeeService.addStudent(Settings.XML_FILE_PATH, student);
-//        return "Student Added";
-//    }
-
-//    @DeleteMapping("/deleteByID/{ID}")
-//    public String deleteStudent(@PathVariable String ID) {
-//        employeeService.deleteStudentByID(ID, Settings.XML_FILE_PATH);
-//        return String.format("Student with ID %s deleted successfully", ID);
-//
-//    }
-
+    @DeleteMapping("/deleteByID/{ID}")
+    public String deleteEmployee(@PathVariable int ID) {
+        employeeService.deleteEmployeeByID(ID);
+        return String.format("Employee with ID %s deleted successfully", ID);
+    }
 
     @GetMapping("/javaExperts")
     public List<Employee> getJavaExperts() {
@@ -121,7 +107,8 @@ public class EmployeeController {
 
         List<Employee> result = employees.stream()
                 .filter(emp -> emp.getKnownLanguages().stream()
-                        .anyMatch(lang -> language.equals(lang.getLanguageName()) && lang.getScoreOutof100() > scoreThreshold))
+                        .anyMatch(lang -> language.equals(lang.getLanguageName())
+                                && lang.getScoreOutof100() > scoreThreshold))
                 .sorted(Comparator.comparing(Employee::getFirstName)) // Sorting by first name
                 .collect(Collectors.toList());
 
@@ -135,6 +122,16 @@ public class EmployeeController {
 
         return result;
     }
+
+    @PatchMapping("/updateByID/{ID}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable int ID, @RequestBody Employee employee) {
+        Employee e = employeeService.updateEmployee(ID, employee);
+
+        if (e == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().body(e);
+        }
+    }
+
 }
-
-
