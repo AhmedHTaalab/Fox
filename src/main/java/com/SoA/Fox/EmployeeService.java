@@ -56,6 +56,14 @@ public class EmployeeService {
 
     public void addEmployee(Employee employee) {
         List<Employee> employees = readEmployeesFromJsonFile();
+
+        Employee withSameID = employees.stream().filter(empl -> empl.getEmployeeID() == employee.getEmployeeID())
+                .findFirst().orElse(null);
+
+        if (withSameID != null) {
+            throw new IllegalArgumentException("Employee with same ID already exists");
+        }
+
         employees.add(employee);
         writeEmployeesToJsonFile(employees);
     }

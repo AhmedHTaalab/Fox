@@ -1,5 +1,6 @@
 package com.SoA.Fox;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Employee")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -66,9 +66,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/")
-    public String addEmployee(@RequestBody Employee employee) {
-        employeeService.addEmployee(employee);
-        return String.format("Employee with ID %s added successfully", employee.getEmployeeID());
+    public ResponseEntity<String> addEmployee(@RequestBody Employee employee) {
+        try {
+            employeeService.addEmployee(employee);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body("Employee added successfully");
     }
 
     @DeleteMapping("/deleteByID/{ID}")
@@ -114,10 +118,7 @@ public class EmployeeController {
 
         if (result.isEmpty()) {
             // If no results found, return a custom message or handle as needed
-            Employee noneFound = new Employee();
-            noneFound.setFirstName("None");
-            noneFound.setLastName("Found");
-            result.add(noneFound);
+            return List.of();
         }
 
         return result;
