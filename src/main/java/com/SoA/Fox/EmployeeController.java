@@ -1,6 +1,5 @@
 package com.SoA.Fox;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -113,7 +112,7 @@ public class EmployeeController {
                 .filter(emp -> emp.getKnownLanguages().stream()
                         .anyMatch(lang -> language.equals(lang.getLanguageName())
                                 && lang.getScoreOutof100() > scoreThreshold))
-                .sorted(Comparator.comparing(Employee::getFirstName)) // Sorting by first name
+                .sorted(Employee.getComparator(language)) // Sorting by first name
                 .collect(Collectors.toList());
 
         if (result.isEmpty()) {

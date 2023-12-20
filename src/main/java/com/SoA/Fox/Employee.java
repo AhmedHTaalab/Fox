@@ -3,6 +3,7 @@ package com.SoA.Fox;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Comparator;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -61,6 +62,25 @@ public class Employee {
     // Getters and setters for KnownLanguages
     public List<KnownLanguage> getKnownLanguages() {
         return knownLanguages;
+    }
+
+    // Comparator for sorting employees by their score in a given language
+    public static Comparator<Employee> getComparator(String languageName) {
+        return new Comparator<Employee>() {
+            @Override
+            public int compare(Employee e1, Employee e2) {
+                for (KnownLanguage knownLanguage : e1.getKnownLanguages()) {
+                    if (knownLanguage.getLanguageName().equals(languageName)) {
+                        for (KnownLanguage knownLanguage2 : e2.getKnownLanguages()) {
+                            if (knownLanguage2.getLanguageName().equals(languageName)) {
+                                return knownLanguage2.getScoreOutof100() - knownLanguage.getScoreOutof100();
+                            }
+                        }
+                    }
+                }
+                return 0;
+            }
+        };
     }
 
     public void setKnownLanguages(List<KnownLanguage> knownLanguages) {
